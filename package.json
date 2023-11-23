@@ -1,7 +1,7 @@
 {
     "name": "ppms",
     "version": "2.0.0",
-    "description": "Campus Placement Prediction & Management System",
+    "description": "Campus Placement Helper & Management System",
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
@@ -11,7 +11,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/27px/placement-prediction-and-management-system.git"
+        "url": "git+https://github.com/Siddesh272/PlaceEase.git"
     },
     "keywords": [
         "Campus",
@@ -23,12 +23,12 @@
         "Job",
         "Internship"
     ],
-    "author": "27px",
+    "author": "27p",
     "license": "AGPL-3.0-or-later",
     "bugs": {
-        "url": "https://github.com/27px/placement-prediction-and-management-system/issues"
+        "url": "https://github.com/Siddesh272/PlaceEase/issues"
     },
-    "homepage": "https://github.com/27px/placement-prediction-and-management-system#readme",
+    "homepage": "https://github.com/Siddesh272/PlaceEase#readme",
     "dependencies": {
         "brain.js": "^2.0.0-beta.2",
         "cookie-parser": "^1.4.5",

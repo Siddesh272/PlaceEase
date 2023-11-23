@@ -37,8 +37,8 @@ body {
 }
 .profile .picwrapper:hover .overlay {
     /* Disabled because edit not implemented */
-    /* opacity:1;
-  transform:translateY(0%); */
+    opacity:1;
+  transform:translateY(0%);
 }
 .profile .picwrapper .overlay::before {
     content: "";
@@ -140,8 +140,8 @@ body {
     background-position: 25% 25%;
 }
 .profile:hover .edit {
-    /* width:120px;
-  height:120px; */
+    width:120px;
+  height:120px;
 }
 .layout .item .fullwrapper {
     position: relative;
@@ -517,27 +517,20 @@ body {
     flex-direction: row;
 }
 .layout .prediction-success {
-    background: #d26ea5;
+    background: #64CCC5;
     /* filter:hue-rotate(250deg) contrast(2); */
 }
 .layout .prediction-failure {
-    background: #74bf3d;
+    background: #EF6262;
 }
 .layout .prediction .icon {
-    width: 260px;
+    width: 450px;
     height: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.layout .prediction-success .icon {
-    background-image: url("../../images/student/predict-success.gif");
-    background-size: 175%;
-}
-.layout .prediction-failure .icon {
-    background-image: url("../../images/student/predict-failure.gif");
-    box-shadow: 0px 0px 75px 30px #74bf3d inset;
-}
+
 .layout .wrap {
     width: 100%;
     height: 100%;

@@ -5026,5 +5026,29 @@
     "intern": 1,
     "extras": 1,
     "arrears": 1
+  },
+  {
+    "placed": 0,
+    "engineering": 1,
+    "sslc": 0.9059999999999999,
+    "plustwo": 0.9,
+    "ug": 0.94,
+    "pg": 0,
+    "project": 0,
+    "intern": 0,
+    "extras": 0,
+    "arrears": 0
+  },
+  {
+    "placed": 0,
+    "engineering": 1,
+    "sslc": 0.7,
+    "plustwo": 0.65,
+    "ug": 0.72,
+    "pg": 0,
+    "project": 0,
+    "intern": 0,
+    "extras": 0,
+    "arrears": 1
   }
 ]

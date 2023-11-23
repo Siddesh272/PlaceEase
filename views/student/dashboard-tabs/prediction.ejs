@@ -1,13 +1,87 @@
 <div class="layout dashboard single-layout">
   <div class="item wide prediction <%-(placement)?'prediction-success':'prediction-failure'%>">
-    <div class="icon"></div>
+    <div class="icon">
+      <div class="skill">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
+          <defs>
+            <linearGradient id="GradientColor">
+              <stop offset="0%" stop-color="#e91e63" />
+              <stop offset="100%" stop-color="#673ab7" />
+            </linearGradient>
+          </defs>
+          <circle cx="80" cy="80" r="70" stroke-linecap="round"/>
+        </svg>
+        <div class="outer">
+          <div class="inner">
+            <div id="number"><%-percent%> %</div>
+          </div>
+        </div>
+      </div>
+      <style>
+        .skill {
+          width: 160px;
+          height: 160px;
+          position: relative;
+        }
+        .outer {
+          position: absolute;
+          height: 160px;
+          width: 160px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
+            -6px -6px 10px -1px rgba(255, 255, 255, 0.7);
+        }
+        .inner {
+          position: relative;
+          height: 120px;
+          width: 120px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: inset 4px 4px 6px -1px rgba(0, 0, 0, 0.2),
+            inset -4px 4px 6px -1px rgba(255, 255, 255, 0.7),
+            -0.5px -0.5px 0px rgba(255, 255, 255, 1),
+            0.5px 0.5px 0px rgba(0, 0, 0, 0.15),
+            0px 12px 10px -10px rgba(0, 0, 0, 0.05);
+        }
+        #number {
+          font-weight: 600;
+          color: #555;
+        }
+        circle {
+          fill: none;
+          stroke: url(#GradientColor);
+          stroke-width: 20px;
+          stroke-dasharray: 472;
+          stroke-dashoffset: 472;
+          animation: anim 2s linear forwards;
+        }
+        svg {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        @keyframes anim {
+          100% {
+            stroke-dashoffset: <%- Math.round((100 - percent) * 4.72) %>;
+          }
+        }
+      </style>
+      
+      
+    </div>
     <div class="wrap">
       <div class="title"><%-(placement)?'Congrats':'Sorry'%></div>
       <%
         if(placement)
         {
           %>
-            <div class="sub-title">You have a high <%-percent%> chance to get placed.</div>
+            <div class="sub-title">You have a HIGH chance to get placed.</div>
+            <div class="sub-title">Your Placement Probability is : <%-percent%> % </div>
             <div class="sub-title">Don't stop, Keep training.</div>
             <div class="sub-title">See Suggestions.</div>
           <%
@@ -15,7 +89,8 @@
         else
         {
           %>
-            <div class="sub-title">Your chances of getting placed are low <%-percent%>.</div>
+            <div class="sub-title">Your chances of getting placed are LOW.</div>
+            <div class="sub-title">Your Placement Probability is : <%-percent%> % </div>
             <div class="sub-title">Don't let this discourage you.</div>
             <div class="sub-title">See Suggestions.</div>
           <%
@@ -61,3 +136,4 @@
     </div>
   </div>
 </div>
+

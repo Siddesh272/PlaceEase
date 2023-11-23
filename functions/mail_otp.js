@@ -3,7 +3,7 @@ const user_config = require("../config/user_config.json");
 function setMailOTP(otp) {
     return `
         <div style="width:100%;text-align:center;">
-          <div style="font-size:23px;font-weight:900;font-family:monospace;padding:20px 10px;letter-spacing:1px;">Placement Prediction & Management System</div>
+          <div style="font-size:23px;font-weight:900;font-family:monospace;padding:20px 10px;letter-spacing:1px;">Placement Helping & Management System</div>
           <div style="background:url('${user_config.NETIMAGES.OTP}') no-repeat center;background-size:cover;height:400px;">
             <div style="font-family:sans-serif;font-size:30px;color:#FFF;font-weight:900;letter-spacing:1px;padding:110px 0px;">Verify E-Mail</div>
             <div>

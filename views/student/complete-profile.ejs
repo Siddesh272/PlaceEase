@@ -12,7 +12,7 @@
   </head>
   <body>
     <video muted autoplay loop poster="../../static/videos/student-new.png" class="bg">
-      <source src="../../static/videos/student-new.mp4" type="video/mp4">
+      <source src="../../static/videos/student-new.mov" type="video/mp4">
     </video>
     <!--Navigation Bar Start-->
       <%- include("../partials/nav.ejs",{
@@ -205,15 +205,15 @@
                   <div class="title">Admission</div>
                 </div>
                 <div class="row">
-                  <input type="text" name="admnumber" placeholder="Admission Number" id="admnumber">
+                  <input type="text" name="admnumber" placeholder="College PID" id="admnumber">
                 </div>
                 <div class="row">
                   <select name="admtype" id="admtype" onchange="this.blur();">
                     <option disabled selected value> -- Admission Type -- </option>
-                    <option value="regular">Regular</option>
-                    <option value="part time">Part Time</option>
-                    <option value="lateral">Lateral</option>
-                    <option value="transfered">Transferred</option>
+                    <option value="regular">GENERAL</option>
+                    <option value="tfws">TFWS</option>
+                    <option value="obc">OBC</option>
+                    <option value="j & k">J & K</option>
                   </select>
                 </div>
                 <div class="row">
@@ -290,12 +290,12 @@
                       <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                     </div>
                   </div>
-                  <div class="text">Complete Profile by adding SSLC details.</div>
+                  <div class="text">Complete Profile by adding SSC details.</div>
                 </div>
               </div>
               <div class="tab">
                 <div class="row">
-                  <div class="title">SSLC</div>
+                  <div class="title">SSC</div>
                 </div>
                 <div class="row">
                   <select name="sslcboard" id="sslcboard" onchange="this.blur();">
@@ -342,12 +342,12 @@
                       <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                     </div>
                   </div>
-                  <div class="text">Complete Profile by adding Plus Two details.</div>
+                  <div class="text">Complete Profile by adding HSC details.</div>
                 </div>
               </div>
               <div class="tab">
                 <div class="row">
-                  <div class="title">Plus Two</div>
+                  <div class="title">HSC</div>
                 </div>
                 <div class="row">
                   <select name="plustwoboard" id="plustwoboard" onchange="this.blur();">

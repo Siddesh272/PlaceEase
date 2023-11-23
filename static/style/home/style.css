@@ -339,17 +339,8 @@ body::-webkit-scrollbar-thumb:hover {
         flex-flow: column;
     }
 }
-#box1 .quote {
-    color: #fff;
-    font-family: var(--font-sub-title);
-    font-weight: 900;
-    letter-spacing: 0.6vmin;
-    font-size: calc(3vmin + 2vmax);
-    text-shadow: 0px 0px 10px #000000;
-    text-align: center;
-    padding: 0px 10px;
-}
-#box1 a {
+
+.video-bg #box2 a {
     color: #000;
     text-decoration: none;
     border: 1px solid #000;
@@ -361,7 +352,7 @@ body::-webkit-scrollbar-thumb:hover {
     box-shadow: 0px 0px 5px 0px #000000;
     transition: background-color 0.3s;
 }
-#box1 a:hover {
+.video-bg #box2 a:hover {
     background: var(--teal);
 }
 .video-bg video,
