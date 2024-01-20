@@ -18,7 +18,7 @@
     <div class="container">
       <div class="wrapper">
         <%
-          if(type=="admin" || type=="coordinator")
+          if(type=="admin")
           {
             %>
               <div class="uploader" onclick="upload();">
@@ -27,7 +27,7 @@
                 </div>
                 <div class="desc">Upload</div>
               </div>
-              <form method="post" action"/gallery" enctype="multipart/form-data">
+              <form method="post" action="/gallery" enctype="multipart/form-data">
                 <input type="file" id="up" name="imgallerry" accept="image/*" onchange="testUpload(event);">
               </form>
             <%

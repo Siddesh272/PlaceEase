@@ -480,13 +480,68 @@ studentTabs.post("/prediction", async (req, res) => {
             // input.push(arrears);
 
             var input = purifyDataSet(userData.result);
-            var percent = NeuralNetwork(input); //predict
+            var output = NeuralNetwork(input);
+            var percent = parseInt(output * 10000) / 100;
             var placement = percent < 0.5 ? false : true;
-            percent = parseInt(percent * 10000) / 100;
+            function calculateSensitivity(input, output) {
+                const sensitivity = [];
+                for (let i = 0; i < input.length; i++) {
+                  const sensitivityDelta = (output - NeuralNetwork(input.map((x, j) => i === j ? x + 0.01 : x))) / 0.01;
+                  sensitivity.push(sensitivityDelta);
+                }
+                return sensitivity;
+              }
+              
+              // Identify the inputs with the highest sensitivity
+              function identifyHighestSensitivityInputs(sensitivity) {
+                const highestSensitivityInputs = [];
+                for (let i = 3; i < sensitivity.length; i++) {
+                  if (sensitivity[i] > 0) {
+                    highestSensitivityInputs.push(i);
+                  }
+                }
+                return highestSensitivityInputs;
+              }
+              
+              // Recommend improving the inputs with the highest sensitivity
+              function recommendImprovements(highestSensitivityInputs) {
+                const recommendations = [];
+                for (const input of highestSensitivityInputs) {
+                  switch (input) {
+                    case 3:
+                      recommendations.push("Increase your UG score.");
+                      break;
+                    case 4:
+                      recommendations.push("Increase your PG score.");
+                      break;
+                    case 5:
+                      recommendations.push("Increase your project score.");
+                      break;
+                    case 6:
+                      recommendations.push("Increase your intern score.");
+                      break;
+                    case 7:
+                      recommendations.push("Increase your extra-curricular activities score.");
+                      break;
+                    case 8:
+                      recommendations.push("Decrease your number of arrears.");
+                      break;
+                    default:
+                      recommendations.push("Unknown input.");
+                      break;
+                  }
+                }
+                return recommendations;
+              }
+            const sensitivity = calculateSensitivity(input, output);
+            const highestSensitivityInputs = identifyHighestSensitivityInputs(sensitivity);
+            const recommendations = recommendImprovements(highestSensitivityInputs);
+
             // console.log(percent,placement);
             res.render("student/dashboard-tabs/prediction", {
                 placement,
                 percent,
+                recommendations
             });
         })
         .catch((error) => {
