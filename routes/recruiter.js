@@ -344,14 +344,18 @@ recruiter.post("/recruitments/add", async (req, res) => {
 // Recruit a Student
 recruiter.get("/recruitments/:student/recruit", async (req, res) => {
     var student = req.params.student;
+
     const user = await new User(req);
+
     await user
         .initialize()
         .then(async (data) => {
             var userData = await user.getUserData(user.user, {
                 _id: 0,
+                "email":1,
                 "data.name": 1,
             });
+
             if (data.isLoggedIn) {
                 return [
                     await MongoClient.connect(DB_CONNECTION_URL, {
@@ -366,37 +370,72 @@ recruiter.get("/recruitments/:student/recruit", async (req, res) => {
         .then(async ([mongo, userData]) => {
             var db = await mongo.db(config.DB_SERVER.DB_DATABASE);
             var userTable = await db.collection("user_data");
-            return Promise.all([
-                userTable.updateOne(
-                    {
-                        email: user.user,
+
+            // Fetch admin's email based on usertype=admin
+            const adminData = await userTable.findOne({ type: "admin" }, { email: 1 });
+
+            if (!adminData || !adminData.email) {
+                throw new Error("Admin email not found in the database.");
+            }
+
+            const adminEmail = adminData.email;
+
+            // Update student's record
+            const selectedStudentData = await user.getUserData(student, {
+                _id: 0,
+                "data.name": 1,
+            });
+
+            const updateStudent = userTable.updateOne(
+                {
+                    email: user.user,
+                },
+                {
+                    $push: {
+                        "data.job.selected": student,
                     },
-                    {
-                        $push: {
-                            "data.job.selected": student,
-                        },
-                    }
-                ),
-                userTable.updateOne(
-                    {
-                        email: student,
+                }
+            );
+
+            // Update student's placement status and add a message
+            const updateStudentPlacement = userTable.updateOne(
+                {
+                    email: student,
+                },
+                {
+                    $set: {
+                        "data.admission.placed": true,
                     },
-                    {
-                        $set: {
-                            "data.admission.placed": true,
+                    $push: {
+                        messages: {
+                            title: "Placement",
+                            message: `Congrats, You are Selected by <b>${userData.result.data.name}</b>`,
                         },
-                        $push: {
-                            messages: {
-                                title: "Placement",
-                                message: `Congrats, You are Selected by <b>${userData.result.data.name}</b>`,
-                            },
+                    },
+                }
+            );
+
+            // Update admin's record with a message
+            const updateAdmin = userTable.updateOne(
+                {
+                    email: adminEmail,
+                },
+                {
+                    $push: {
+                        messages: {
+                            from: userData.result.email,
+                            name: "Student Placement",
+                            message: `Student <b>${selectedStudentData.result.data.name}-${student}</b> has been selected by <b>${userData.result.data.name}</b>.`,
+                            type: "feedback",
+                            date: new Date(),
                         },
-                    }
-                ),
-            ]);
+                    },
+                }
+            );
+
+            return Promise.all([updateStudent, updateStudentPlacement, updateAdmin]);
         })
-        .then((d) => {
-            // console.log(d);
+        .then(() => {
             res.json({
                 success: true,
             });

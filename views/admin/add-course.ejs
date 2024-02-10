@@ -6,12 +6,12 @@
       {
         %>
           <div class="row">
-            <div class="title">Add Course</div>
+            <div class="title">Add Department</div>
           </div>
           <div class="row">
-            <label for="department">Select Department</label>
+            <label for="department">Select Course</label>
             <select name="department" id="department">
-              <option value selected disabled>-- Select Department --</option>
+              <option value selected disabled>-- Select Course --</option>
               <%
                 department.forEach(name=>{
                   %>
@@ -22,8 +22,8 @@
             </select>
           </div>
           <div class="row">
-            <label for="name">Course Name</label>
-            <input type="name" name="name" id="name" placeholder="Course Name" required>
+            <label for="name">Department Name</label>
+            <input type="name" name="name" id="name" placeholder="Department Name" required>
           </div>
           <div class="row">
             <label for="num">Number of Semesters</label>
@@ -44,8 +44,8 @@
       {
         %>
           <div class="row">
-            <label for="" class="center">Add Department first</label>
-            <button type="button" onclick="_('#add-department').click();">Goto Add Department</button>
+            <label for="" class="center">Add Course first</label>
+            <button type="button" onclick="_('#add-department').click();">Goto Add Course</button>
           </div>
         <%
       }

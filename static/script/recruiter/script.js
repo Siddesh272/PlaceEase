@@ -333,16 +333,16 @@ function addDepartment(event) {
     var message = _("#add-department-message");
     var type = _("#department-type").selectedIndex; // just need type as index
     if (department == "") {
-        message.innerHTML = "Enter department name";
+        message.innerHTML = "Enter Course name";
         return;
     }
     if (department.length < 2) {
         // eg: CS is valid but only has length 2, so minimum length is 2
-        message.innerHTML = "Invalid department name";
+        message.innerHTML = "Invalid Course name";
         return;
     }
     if (/[^a-zA-Z ]/.test(department)) {
-        message.innerHTML = "Invalid department name";
+        message.innerHTML = "Invalid Course name";
         return;
     }
     message.innerHTML = "";
@@ -366,7 +366,7 @@ function addDepartment(event) {
         })
         .then((data) => {
             if (data.success) {
-                showPopUp("success", "Department added Successfully");
+                showPopUp("success", "Course added Successfully");
             } else {
                 message.innerHTML = data.message;
             }
@@ -386,19 +386,19 @@ function addCourse(event) {
     var course = _("#name").value;
     var num = _("#num").value;
     if (department.selectedIndex == 0) {
-        message.innerHTML = "Select department";
+        message.innerHTML = "Select Course";
         return;
     }
     if (course == "") {
-        message.innerHTML = "Enter course name";
+        message.innerHTML = "Enter Department name";
         return;
     }
     if (course.length < 2) {
-        message.innerHTML = "Invalid course name";
+        message.innerHTML = "Invalid Department name";
         return;
     }
     if (/[^a-zA-Z ]/.test(course)) {
-        message.innerHTML = "Invalid course name";
+        message.innerHTML = "Invalid Department name";
         return;
     }
     num = parseInt(num);
@@ -432,7 +432,7 @@ function addCourse(event) {
         })
         .then((data) => {
             if (data.success) {
-                showPopUp("success", "Course added successfully");
+                showPopUp("success", "Department added successfully");
             } else {
                 message.innerHTML = data.message;
             }
