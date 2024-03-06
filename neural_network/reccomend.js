@@ -42,7 +42,7 @@ function recommendImprovements(highestSensitivityInputs) {
         recommendations.push("Increase your extra-curricular activities score.");
         break;
       case 8:
-        recommendations.push("Decrease your number of arrears.");
+        recommendations.push("Decrease your number of kts.");
         break;
       default:
         recommendations.push("Unknown input.");
@@ -54,7 +54,7 @@ function recommendImprovements(highestSensitivityInputs) {
 
 // Example usage:
 
-const input = [1, 0.8, 0.7, 0.5, 0, 0.3, 0.5, 0.6, 0];
+const input = [1,0.5,0,0.6,1,0.2,0,0,0.8];
 const output = NeuralNetwork(input);
 
 // Display the predicted placement probability output

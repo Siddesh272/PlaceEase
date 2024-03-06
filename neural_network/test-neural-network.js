@@ -11,25 +11,25 @@ let falseNegatives = 0;
 testData.forEach((d, i) => {
     const output = NeuralNetwork([
         d["engineering"],
-        d["sslc"],
-        d["plustwo"],
+        d["ssc"],
+        d["hsc"],
         d["ug"],
         d["pg"],
         d["project"],
         d["intern"],
         d["extras"],
-        d["arrears"],
+        d["kts"],
     ]);
 
-    const predictedPlacement = parseInt(output[0] * 10000) / 100 < 75 ? 0 : 1;
+    const predictedPlacement = parseFloat(output[0]).toFixed(4);;
 
     console.log(i + 336, d["placed"], predictedPlacement, parseFloat(output[0]).toFixed(2));
 
-    if (d["placed"] === 1 && predictedPlacement === 1) {
+    if (d["placed"] >= 0.5 && predictedPlacement >= 0.5) {
         truePositives++;
-    } else if (d["placed"] === 0 && predictedPlacement === 0) {
+    } else if (d["placed"] < 0.5 && predictedPlacement < 0.5) {
         trueNegatives++;
-    } else if (d["placed"] === 0 && predictedPlacement === 1) {
+    } else if (d["placed"] < 0.5 && predictedPlacement >= 0.5) {
         falsePositives++;
     } else {
         falseNegatives++;

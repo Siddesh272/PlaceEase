@@ -481,8 +481,6 @@ studentTabs.post("/prediction", async (req, res) => {
 
             var input = purifyDataSet(userData.result);
             var output = NeuralNetwork(input);
-            var percent = parseInt(output * 10000) / 100;
-            var placement = percent < 0.5 ? false : true;
             function calculateSensitivity(input, output) {
                 const sensitivity = [];
                 for (let i = 0; i < input.length; i++) {
@@ -536,7 +534,8 @@ studentTabs.post("/prediction", async (req, res) => {
             const sensitivity = calculateSensitivity(input, output);
             const highestSensitivityInputs = identifyHighestSensitivityInputs(sensitivity);
             const recommendations = recommendImprovements(highestSensitivityInputs);
-
+            var percent = parseInt(output * 10000) / 100;
+            var placement = percent < 50 ? false : true;
             // console.log(percent,placement);
             res.render("student/dashboard-tabs/prediction", {
                 placement,
@@ -551,53 +550,6 @@ studentTabs.post("/prediction", async (req, res) => {
         });
 });
 
-//Coordinator Image Upload
-studentTabs.post("/resource/upload", async (req, res) => {
-    var isLoggedIn,
-        type,
-        result = {};
-    const user = await new User(req);
-    await user
-        .initialize()
-        .then((data) => {
-            isLoggedIn = data.isLoggedIn;
-            type = data.type;
-        })
-        .catch((error) => {
-            console.log(error.message);
-            isLoggedIn = false;
-            type = "guest";
-        })
-        .finally(async () => {
-            if (isLoggedIn && type == "coordinator") {
-                if (req.files != undefined) {
-                    if (req.files.file != undefined && req.body.title != "") {
-                        var fname = `${__dirname}/../data/resource/${req.files.file.name}`;
-                        await req.files.file
-                            .mv(fname)
-                            .then(() => {
-                                result.success = true;
-                            })
-                            .catch((err) => {
-                                console.log(err.message);
-                                result.success = false;
-                                result.message = "Couldn't Upload Image";
-                                result.devlog = err.message;
-                            });
-                    } else {
-                        result.success = false;
-                        result.message = "Files not Uploaded";
-                    }
-                } else {
-                    result.success = false;
-                    result.message = "No files Uploaded";
-                }
-            } else {
-                result.success = false;
-                result.message = "Not Logged in";
-            }
-        });
-    res.json(result);
-});
+
 
 module.exports = studentTabs;

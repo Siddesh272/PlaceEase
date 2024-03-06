@@ -406,8 +406,8 @@ function addCourse(event) {
         message.innerHTML = "Invalid number of Semesters";
         return;
     }
-    if (num < 1 || num > 15) {
-        message.innerHTML = "Semester should be between 1 and 15";
+    if (num < 1 || num > 8) {
+        message.innerHTML = "Semester should be between 1 and 8";
         return;
     }
     message.innerHTML = "";
@@ -566,3 +566,47 @@ function dumpData(url, event, code = null) {
             button.classList.remove("progress");
         });
 }
+
+function showUpload() {
+    _("#file").click();
+}
+function uploadFile(e) {
+    var file = _("#file").files[0];
+    if (
+        Array.from($("a.file")).some(
+            (f) => f.children[1].innerHTML == file.name
+        )
+    ) {
+        showPopUp("error", `Same filename exists for another file`);
+        return;
+    }
+    var up = new FormData();
+    up.append("file", file);
+    fetch("./resource/upload", {
+        method: "POST",
+        body: up,
+    })
+        .then((resp) => {
+            return resp.json();
+        })
+        .then((data) => {
+            if (data.success) {
+                showPopUp("success", "Uploaded", () => {
+                    openTab({
+                        currentTarget: {
+                            getAttribute: () => "training-resources",
+                        },
+                    });
+                });
+            } else {
+                if (data.devlog != undefined) {
+                    console.error(data.devlog);
+                }
+                showPopUp("error", data.message);
+            }
+        })
+        .catch((err) => {
+            console.log(err.message);
+        });
+}
+

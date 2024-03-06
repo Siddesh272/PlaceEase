@@ -10,7 +10,8 @@ const getResultFromCursor = require("../functions/getResultFromCursor.js");
 const nodemailer = require("nodemailer");
 const mail_credentials = require("../config/mail.js");
 const dumpData = require("./dump-data");
-
+const path = require("path");
+const fs = require("fs");
 //Route admin
 admin.get("/", (req, res) => {
     res.redirect("admin/dashboard");
@@ -547,7 +548,81 @@ admin.post("/dashboard/schedule/:company/approve", async (req, res) => {
             });
         });
 });
+admin.post("/training-resources", async (req, res) => {
+    const dir = path.join(__dirname, "../data/resource"); 
+    var type;
+    const user = new User(req);
+    await user
+        .initialize()
+        .then(async(data) => {
+            isLoggedIn = data.isLoggedIn;
+            type = data.type;
+        })
+        .catch((error) => {
+            console.log(error.message);
+            isLoggedIn = false;
+            type = "guest";
+        })
+        .finally(() => {
+            fs.readdir(dir, (err, files) => {
+                if (err) {
+                    files = [];
+                }
+                res.render("admin/resources", {
+                    files,
+                    type,
+                });
+            });
+        });
+});
 
+admin.post("/resource/upload", async (req, res) => {
+    var isLoggedIn,
+        type,
+        result = {};
+    const user = await new User(req);
+    await user
+        .initialize()
+        .then(async(data) => {
+            isLoggedIn = data.isLoggedIn;
+            type = data.type;
+        })
+        .catch((error) => {
+            console.log(error.message);
+            isLoggedIn = false;
+            type = "guest";
+        })
+        .finally(async () => {
+            if (isLoggedIn && type == "admin") {
+                if (req.files != undefined) {
+                    if (req.files.file != undefined && req.body.title != "") {
+                        var fname = `${__dirname}/../data/resource/${req.files.file.name}`;
+                        await req.files.file
+                            .mv(fname)
+                            .then(() => {
+                                result.success = true;
+                            })
+                            .catch((err) => {
+                                console.log(err.message);
+                                result.success = false;
+                                result.message = "Couldn't Upload Image";
+                                result.devlog = err.message;
+                            });
+                    } else {
+                        result.success = false;
+                        result.message = "Files not Uploaded";
+                    }
+                } else {
+                    result.success = false;
+                    result.message = "No files Uploaded";
+                }
+            } else {
+                result.success = false;
+                result.message = "Not Logged in";
+            }
+        });
+    res.json(result);
+});
 //Other tabs
 admin.post("/dashboard/:tab", async (req, res) => {
     const user = await new User(req);

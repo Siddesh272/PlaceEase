@@ -569,7 +569,7 @@ route.post("/gallery/upload", async (req, res) => {
             type = "guest";
         })
         .finally(async () => {
-            if (isLoggedIn && ["coordinator", "admin"].includes(type)) {
+            if (isLoggedIn && ["admin"].includes(type)) {
                 if (req.files != undefined) {
                     if (req.files.image != undefined && req.body.title != "") {
                         var fname = `${__dirname}/../data/gallery/${

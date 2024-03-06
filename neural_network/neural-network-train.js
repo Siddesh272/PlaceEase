@@ -16,14 +16,14 @@ fs.readFile(path.join(__dirname, "data.json"))
       return {
         input: [
           d["engineering"],
-          d["sslc"],
-          d["plustwo"],
+          d["ssc"],
+          d["hsc"],
           d["ug"],
           d["pg"],
           d["project"],
           d["intern"],
           d["extras"],
-          d["arrears"],
+          d["kts"],
         ],
         output: [d["placed"]],
       };
@@ -39,7 +39,7 @@ fs.readFile(path.join(__dirname, "data.json"))
   .then(() => {
     console.log(network.toFunction().toString());
     return fs.writeFile(
-      path.join(__dirname, "trained-model-dummy.js"),
+      path.join(__dirname, "trained-model.js"),
       `module.exports=${network.toFunction().toString()};`
     );
   })
