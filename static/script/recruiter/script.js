@@ -594,7 +594,7 @@ function uploadFile(e) {
                 showPopUp("success", "Uploaded", () => {
                     openTab({
                         currentTarget: {
-                            getAttribute: () => "training-resources",
+                            getAttribute: () => "resources",
                         },
                     });
                 });

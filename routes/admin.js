@@ -548,13 +548,13 @@ admin.post("/dashboard/schedule/:company/approve", async (req, res) => {
             });
         });
 });
-admin.post("/training-resources", async (req, res) => {
+admin.post("/dashboard/resources", async (req, res) => {
     const dir = path.join(__dirname, "../data/resource"); 
-    var type;
-    const user = new User(req);
+    var isLoggedIn,type;
+    const user =await new User(req);
     await user
         .initialize()
-        .then(async(data) => {
+        .then((data) => {
             isLoggedIn = data.isLoggedIn;
             type = data.type;
         })
@@ -568,7 +568,7 @@ admin.post("/training-resources", async (req, res) => {
                 if (err) {
                     files = [];
                 }
-                res.render("admin/resources", {
+                res.render(`admin/resources`, {
                     files,
                     type,
                 });
@@ -583,7 +583,7 @@ admin.post("/resource/upload", async (req, res) => {
     const user = await new User(req);
     await user
         .initialize()
-        .then(async(data) => {
+        .then((data) => {
             isLoggedIn = data.isLoggedIn;
             type = data.type;
         })

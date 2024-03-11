@@ -70,15 +70,6 @@ x="55%"; } else if(ext.length==2) { x="50%"; } else if(ext.length==3) { x="45%";
     </a>
     <% }); } else { %>
     <div class="file file-fill">No files found</div>
-    <% } if(type=="admin") { %>
-    <input
-      type="file"
-      name="file"
-      id="file"
-      class="hidden"
-      onchange="uploadFile(this);"
-    />
-    <a class="upload" onclick="showUpload();">Upload</a>
     <% } %>
   </div>
 </div>

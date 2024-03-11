@@ -54,7 +54,7 @@ function recommendImprovements(highestSensitivityInputs) {
 
 // Example usage:
 
-const input = [1,0.5,0,0.6,1,0.2,0,0,0.8];
+const input = [1,1,0.84,0.71,1,0.83,1,1,0];
 const output = NeuralNetwork(input);
 
 // Display the predicted placement probability output
