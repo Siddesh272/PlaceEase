@@ -519,10 +519,10 @@ studentTabs.post("/prediction", async (req, res) => {
                       recommendations.push("Increase your intern score.");
                       break;
                     case 7:
-                      recommendations.push("Increase your extra-curricular activities score.");
+                      recommendations.push("Increase your extra skills score.");
                       break;
                     case 8:
-                      recommendations.push("Decrease your number of arrears.");
+                      recommendations.push("Decrease your number of KTs.");
                       break;
                     default:
                       recommendations.push("Unknown input.");

@@ -53,11 +53,3 @@ console.log("Recall\t\t:\t" + recall.toFixed(2) + "%");
 console.log("F1 Score\t:\t" + f1Score.toFixed(2));
 
 
-// function test(inp)
-// {
-//   var out=NeuralNetwork(inp);
-//   console.log(parseInt(out[0]*10000)/100);
-// }
-
-
-// test([0,0.5,0,0.6,1,0.2,0.5,0.6,0.8]);
