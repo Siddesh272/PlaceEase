@@ -3,12 +3,7 @@ const studentTabs = express.Router();
 const User = require("../functions/user.js");
 const MongoClient = require("mongodb").MongoClient;
 const DB_CONNECTION_URL = require("../config/db.js");
-const fetch = require("node-fetch");
 const config = require("../config/config.json");
-const stripHTML = require("string-strip-html");
-const purifyDescription = require("../functions/purifyDescription.js");
-const mostRepeated = require("../functions/mostRepeated.js");
-const notInEnglishWords = require("../functions/notInEnglishWords.js");
 const getResultFromCursor = require("../functions/getResultFromCursor.js");
 const purifyDataSet = require("../functions/purifyDataSet.js");
 const path = require("path");
@@ -152,7 +147,7 @@ studentTabs.post("/main", async (req, res) => {
                                     companies,
                                     coordinators,
                                     department,
-                                    statistics,
+                                    statistics
                                 });
                             }
                         );
@@ -318,46 +313,6 @@ studentTabs.post("/drive/:drive/apply", async (req, res) => {
     });
 });
 
-//participate in drive
-// studentTabs.post("/drive/:drive/round/:round",(req,res)=>{
-//   var drive=req.params.drive;
-//   var round=req.params.round;
-//   res.render("student/dashboard-tabs/participate-in-drive",{
-//     drive,
-//     round
-//   });
-// });
-
-//external jobs via api
-studentTabs.post("/external", (req, res) => {
-    res.render("student/dashboard-tabs/external-jobs");
-});
-
-//cors proxy for api fetch
-studentTabs.post("/external/fetch", async (req, res) => {
-    fetch(req.body.url)
-        .then((resp) => resp.json())
-        .then((data) => {
-            res.json({
-                success: true,
-                data,
-            });
-        })
-        .catch((error) => {
-            console.log(error.message);
-            resp.json({
-                success: false,
-                message: error.message,
-            });
-        });
-});
-
-//recommendation layout
-studentTabs.post("/recommendation", (req, res) => {
-    res.render("student/dashboard-tabs/recommendation");
-});
-
-//recommendation layout
 studentTabs.post("/training-resources", async (req, res) => {
     const dir = path.join(__dirname, "../data/resource"); //////
     var isLoggedIn, type;
@@ -386,41 +341,11 @@ studentTabs.post("/training-resources", async (req, res) => {
         });
 });
 
-//recommendation search
-studentTabs.post("/recommendation/search", (req, res) => {
-    Promise.all([
-        fetch(req.body.url),
-        fetch(`${req.body.url}&location=india`),
-        fetch(`${req.body.url}&location=asia`),
-    ])
-        .then((resp) => Promise.all(resp.map((re) => re.json())))
-        .then(([d1, d2, d3]) => {
-            var data = [...d1, ...d2, ...d3];
-            parsed = [];
-            data.forEach((job) => {
-                var p = purifyDescription(stripHTML(job.description).result);
-                parsed = [...parsed, ...p];
-            });
-            return notInEnglishWords(mostRepeated(parsed)).splice(0, 100);
-        })
-        .then((data) => {
-            res.json({
-                success: true,
-                data,
-            });
-        })
-        .catch((error) => {
-            console.log(error.message);
-            res.json({
-                success: false,
-                message: error.message,
-            });
-        });
-});
 
 //placement prediction
 studentTabs.post("/prediction", async (req, res) => {
     const NeuralNetwork = require("../neural_network/trained-model.js");
+    const { calculateSensitivity, identifyHighestSensitivityInputs, recommendImprovements } = require("../neural_network/reccomend.js");
     const user = await new User(req);
     await user
         .initialize()
@@ -435,108 +360,15 @@ studentTabs.post("/prediction", async (req, res) => {
                 "data.education.experience": 1,
                 "data.education.achievement": 1,
             });
-            // var input=[
-            //   userData.result.data.admission.engineering,//engineering
-            //   userData.result.data.education.sslc.mark/100,//sslc
-            //   userData.result.data.education.plustwo.mark/100//plustwo
-            // ];
-            // //Atleast one course will be there
-            // var ug=0,pg=0;// ug uses cgpa and pg is binary status of yes or no
-            // userData.result.data.education.course.forEach(course=>{
-            //   // console.log(course.type,course.cgpa);
-            //   if(course.type=="ug")
-            //   {
-            //     if(course.cgpa>ug)
-            //     {
-            //       ug=course.cgpa;
-            //     }
-            //   }
-            //   else if(course.type=="pg")
-            //   {
-            //     pg=1;//not increment, just one
-            //   }
-            // });
-            // ug/=10;//cgpa
-            // input.push(ug);
-            // input.push(pg);
-            // var project=0,intern=0;
-            // userData.result.data.education.experience.forEach(exp=>{
-            //   if(exp.type=="project")
-            //   {
-            //     project++;
-            //   }
-            //   else // job or internship
-            //   {
-            //     intern++;
-            //   }
-            // });
-            // project=Math.min(1,project/6); // range 0 to 1
-            // intern=Math.min(1,intern); // one or zero
-            // input.push(project);
-            // input.push(intern);
-            // var ach=Math.min(1,userData.result.data.education.achievement.length);
-            // input.push(ach);//extras
-            // var arrears=(Math.min(1,parseInt(userData.result.data.admission.arrears)/2)*100)/100;
-            // input.push(arrears);
-
+            
             var input = purifyDataSet(userData.result);
             var output = NeuralNetwork(input);
-            function calculateSensitivity(input, output) {
-                const sensitivity = [];
-                for (let i = 0; i < input.length; i++) {
-                  const sensitivityDelta = (output - NeuralNetwork(input.map((x, j) => i === j ? x + 0.01 : x))) / 0.01;
-                  sensitivity.push(sensitivityDelta);
-                }
-                return sensitivity;
-              }
-              
-              // Identify the inputs with the highest sensitivity
-              function identifyHighestSensitivityInputs(sensitivity) {
-                const highestSensitivityInputs = [];
-                for (let i = 3; i < sensitivity.length; i++) {
-                  if (sensitivity[i] > 0) {
-                    highestSensitivityInputs.push(i);
-                  }
-                }
-                return highestSensitivityInputs;
-              }
-              
-              // Recommend improving the inputs with the highest sensitivity
-              function recommendImprovements(highestSensitivityInputs) {
-                const recommendations = [];
-                for (const input of highestSensitivityInputs) {
-                  switch (input) {
-                    case 3:
-                      recommendations.push("Increase your UG score.");
-                      break;
-                    case 4:
-                      recommendations.push("Increase your PG score.");
-                      break;
-                    case 5:
-                      recommendations.push("Increase your project score.");
-                      break;
-                    case 6:
-                      recommendations.push("Increase your intern score.");
-                      break;
-                    case 7:
-                      recommendations.push("Increase your extra skills score.");
-                      break;
-                    case 8:
-                      recommendations.push("Decrease your number of KTs.");
-                      break;
-                    default:
-                      recommendations.push("Unknown input.");
-                      break;
-                  }
-                }
-                return recommendations;
-              }
             const sensitivity = calculateSensitivity(input, output);
             const highestSensitivityInputs = identifyHighestSensitivityInputs(sensitivity);
             const recommendations = recommendImprovements(highestSensitivityInputs);
             var percent = parseInt(output * 10000) / 100;
             var placement = percent < 50 ? false : true;
-            // console.log(percent,placement);
+          
             res.render("student/dashboard-tabs/prediction", {
                 placement,
                 percent,

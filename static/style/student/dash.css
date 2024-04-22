@@ -23,6 +23,7 @@ body {
     padding: 0 !important;
     overflow: hidden;
     display: flex;
+    width: 100%;
     flex-direction: row;
 }
 .profile .picwrapper {

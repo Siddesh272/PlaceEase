@@ -52,17 +52,4 @@ function recommendImprovements(highestSensitivityInputs) {
   return recommendations;
 }
 
-// Example usage:
-
-const input = [1,0.45,0.5,0.57,0,0,0,0,1];
-const output = NeuralNetwork(input);
-
-// Display the predicted placement probability output
-console.log("Predicted placement probability:", parseInt(output[0]*10000)/100);
-
-const sensitivity = calculateSensitivity(input, output);
-const highestSensitivityInputs = identifyHighestSensitivityInputs(sensitivity);
-const recommendations = recommendImprovements(highestSensitivityInputs);
-
-console.log("\nRecommendations:");
-recommendations.forEach(recommendation => console.log(recommendation));
+module.exports = { calculateSensitivity, identifyHighestSensitivityInputs, recommendImprovements };

@@ -895,16 +895,16 @@ body,
     background-size: contain;
 }
 .full-wrap .image.department-image {
-    background-image: url("../../images/admin/department.jpg");
-}
-.full-wrap .image.course-image {
     background-image: url("../../images/admin/course.jpg");
 }
+.full-wrap .image.course-image {
+    background-image: url("../../images/admin/department.jpg");
+}  
 .full-wrap .image.schedule-image {
     background-image: url("../../images/admin/schedule.jpg");
 }
 .full-wrap .image.coordinator-image {
-    background-image: url("../../images/admin/coordinator-selection.jpg");
+    background-image: url("../../images/admin/achiever.jpg");
 }
 .full-wrap form {
     width: 100%;

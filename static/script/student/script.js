@@ -195,139 +195,13 @@ function loadCharts() {
             },
         },
     };
-    var statistical_data = JSON.parse(_("#graphData2").innerHTML);
-    var gdata = [],
-        g2data = [];
-
-    var deplabel = new Set();
-    statistical_data.forEach((depdatas) => {
-        Object.keys(depdatas.departments).forEach((dlabel) => {
-            deplabel.add(dlabel);
-        });
-    });
-
-    Array.from(deplabel).forEach((dep, i) => {
-        var sdata = [];
-        statistical_data.forEach((stat) => {
-            sdata.push(
-                stat.departments[dep] != undefined ? stat.departments[dep] : 0
-            );
-        });
-        gdata.push({
-            label: dep,
-            backgroundColor: "rgba(0,128,255,0.3)",
-            borderColor: "rgb(13,71,161)",
-            data: sdata,
-            fill: true,
-        });
-        g2data.push({
-            label: dep,
-            backgroundColor: blueColorSet[i % blueColorSet.length],
-            borderColor: "rgb(13,71,161)",
-            data: sdata,
-            fill: true,
-        });
-    });
-
-    var glabel = [];
-    statistical_data.forEach((stat) => {
-        glabel.push(stat.year);
-    });
-    var colorNames = Object.keys(window.chartColors);
-    var xconfig = {
-        type: "line",
-        data: {
-            labels: glabel,
-            datasets: gdata,
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            title: {
-                display: true,
-                text: "Previous Years Placement Statistics",
-            },
-            tooltips: {
-                mode: "index",
-                intersect: false,
-            },
-            hover: {
-                mode: "nearest",
-                intersect: true,
-            },
-            scales: {
-                xAxes: [
-                    {
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Year",
-                        },
-                    },
-                ],
-                yAxes: [
-                    {
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Number of Recruits",
-                        },
-                    },
-                ],
-            },
-        },
-    };
-    var color = Chart.helpers.color;
-    var barChartData = {
-        labels: glabel,
-        datasets: g2data,
-    };
     function applyEffect() {
         var ctx = _("#graph").getContext("2d");
         window.myDoughnut = new Chart(ctx, config);
-
-        var xctx = _("#graph2").getContext("2d");
-        window.myLine = new Chart(xctx, xconfig);
-
-        var zctx = _("#graph3").getContext("2d");
-        window.myBar = new Chart(zctx, {
-            type: "bar",
-            data: barChartData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                legend: {
-                    position: "top",
-                },
-                title: {
-                    display: true,
-                    text: "Department wise yearly statistics",
-                },
-                scales: {
-                    xAxes: [
-                        {
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: "Year",
-                            },
-                        },
-                    ],
-                    yAxes: [
-                        {
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: "Number of Recruits",
-                            },
-                        },
-                    ],
-                },
-            },
-        });
     }
     applyEffect();
 }
+
 function loadingError() {
     var b = _("#body");
     b.innerHTML = "";
@@ -487,61 +361,7 @@ function logout() {
 function goHome() {
     window.location = "/home";
 }
-function searchExternalJob() {
-    var url = "https://jobs.github.com/positions.json",
-        search = [];
-    var keyword = _("#external-job-search-keyword").value;
-    var place = _("#external-job-search-place").value;
-    var container = _("#external-job-search-result");
-    container.innerHTML = "<div class='loading high-contrast'></div>";
-    if (keyword != "") {
-        search.push(`description=${keyword}`);
-    }
-    if (place != "") {
-        search.push(`location=${place}`);
-    }
-    search = encodeURI(search.join("&").replaceAll(" ", "+"));
-    if (search != "") {
-        url += `?${search}`;
-    }
-    fetch(`./dashboard/external/fetch`, {
-        method: "POST",
-        cache: "force-cache",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url }),
-    })
-        .then((resp) => {
-            if (resp.status !== 200) {
-                throw new Error("Status Error");
-            }
-            return resp.json();
-        })
-        .then((data) => {
-            if (!data.success) {
-                throw new Error(data.message);
-            }
-            container.innerHTML = "";
-            if (data.data.length > 0) {
-                data.data.forEach((job) => {
-                    container.innerHTML += createJob(job);
-                });
-                container.innerHTML += "<div class='spacer'></div>";
-            } else {
-                container.innerHTML += `
-        <div class="external-job not-found">
-          <div class="not-found"></div>
-          <div class="text">No results found</div>
-        </div>
-      `;
-            }
-        })
-        .catch((err) => {
-            console.warn(err.message);
-            container.innerHTML = "<div class='error'></div>";
-        });
-}
+
 function createJob(job) {
     return `
     <div class="external-job">
@@ -567,56 +387,7 @@ function createJob(job) {
 function openInNewTab(url) {
     window.open(url);
 }
-function recommendSkills() {
-    var text = _("#skill-recommendation-keyword"),
-        keyword = text.value;
-    if (keyword == "") {
-        text.focus();
-        return;
-    }
-    var container = _("#skill-recommendation-result");
-    container.innerHTML = "<div class='loading'></div>";
-    fetch("./dashboard/recommendation/search", {
-        method: "POST",
-        cache: "no-store",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            url: `https://jobs.github.com/positions.json?description=${keyword}`,
-        }),
-    })
-        .then((resp) => {
-            if (resp.status === 200) {
-                return resp.json();
-            }
-            throw new Error(`Status Error ${resp.status}`);
-        })
-        .then((data) => {
-            if (data.success) {
-                container.innerHTML = "";
-                if (data.data.length > 0) {
-                    data.data.forEach((skill) => {
-                        container.innerHTML += `<div class="skill">${skill}</div>`;
-                    });
-                } else {
-                    container.innerHTML = `<div class="no-skill">Nothing found</div>`;
-                }
-            } else {
-                container.innerHTML = "<div class='error'></div>";
-                if (data.message) {
-                    console.warn(data.message);
-                }
-                if (data.devlog) {
-                    console.error(data.devlog);
-                }
-            }
-        })
-        .catch((err) => {
-            console.log(err.message);
-            container.innerHTML = "<div class='error'></div>";
-        });
-}
+
 function showUpload() {
     _("#file").click();
 }
