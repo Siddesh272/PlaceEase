@@ -725,6 +725,9 @@ body {
 .layout .huge {
     grid-area: span 2 / span 2;
 }
+.layout .full{
+    grid-area: span 1 / span 3;
+}
 .special {
     color: #ffffff;
     background: var(--primary)
