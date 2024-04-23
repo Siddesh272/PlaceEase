@@ -804,7 +804,8 @@ body {
         grid-template-columns: repeat(1, minmax(200px, 1fr));
     }
     .layout .normal,
-    .layout .wide {
+    .layout .wide,
+    .layout .full{
         grid-area: span 1 / span 1;
     }
     .layout .tall,
@@ -820,7 +821,8 @@ body {
     .layout {
         grid-auto-rows: minmax(min-content, calc(50vh - var(--nav-height)));
     }
-    .layout .wide {
+    .layout .wide, 
+    .layout .full{
         grid-area: span 2 / span 1;
     }
 }
